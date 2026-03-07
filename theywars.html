@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conflits Armés — Veille Mondiale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --border: #2a2a2a;
+      --accent: #c8102e;
+      --accent2: #ff6b35;
+      --text: #e8e0d4;
+      --text2: #8a8278;
+      --text3: #5a5550;
+      --card-bg: #131313;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
+    }
+
+    /* Header */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 0;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .logo-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .logo-title span {
+      color: var(--accent);
+    }
+
+    .logo-sub {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* Breaking bar */
+    .breaking-bar {
+      background: var(--accent);
+      padding: 0.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      overflow: hidden;
+    }
+
+    .breaking-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      background: rgba(0,0,0,0.3);
+      padding: 0.2rem 0.5rem;
+    }
+
+    .breaking-text {
+      font-size: 0.8rem;
+      white-space: nowrap;
+      animation: scroll-left 30s linear infinite;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* Main layout */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stat-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+    }
+
+    /* Filters */
+    .filters-section {
+      margin-bottom: 2rem;
+    }
+
+    .filters-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    /* Search */
+    .search-bar {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.8rem 1rem 0.8rem 2.5rem;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-input::placeholder {
+      color: var(--text3);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text3);
+      font-size: 0.9rem;
+    }
+
+    /* Grid */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    /* Article card */
+    .article-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      transition: background 0.2s;
+      animation: fadeIn 0.4s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .article-card:hover {
+      background: var(--bg3);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .card-category {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-left: 2px solid var(--accent);
+      color: var(--accent2);
+      background: rgba(200,16,46,0.08);
+    }
+
+    .card-score {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .score-bar {
+      width: 40px;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+    }
+
+    .score-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text);
+      margin-bottom: 0.8rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-resume {
+      font-size: 0.78rem;
+      color: var(--text2);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .card-source {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .card-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+    }
+
+    .card-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    .card-link:hover {
+      color: var(--accent2);
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 2rem;
+      gap: 1.5rem;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text3);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* Empty */
+    .empty {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--text3);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* Error */
+    .error-box {
+      background: rgba(200,16,46,0.08);
+      border: 1px solid rgba(200,16,46,0.3);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent2);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      margin-top: 4rem;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .articles-grid {
+        grid-template-columns: 1fr;
+      }
+      .header-meta { display: none; }
+      .stats-bar { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-title">Conflits<span>.</span>Monde</div>
+        <div class="logo-sub">Veille des conflits armés — Mise à jour automatique</div>
+      </div>
+      <div class="header-meta">
+        <div class="live-badge">
+          <div class="live-dot"></div>
+          <span>FLUX EN DIRECT</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="breaking-bar">
+    <span class="breaking-label">⚡ Actif</span>
+    <span class="breaking-text" id="breaking-text">Chargement des dernières actualités...</span>
+  </div>
+
+  <main>
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-label">Articles collectés</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-value" id="stat-sources">9</div>
+        <div class="stat-label">Sources actives</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-value" id="stat-categories">—</div>
+        <div class="stat-label">Conflits couverts</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-value" id="stat-update">—</div>
+        <div class="stat-label">Dernière mise à jour</div>
+      </div>
+    </div>
+
+    <div class="filters-section">
+      <div class="filters-label">Filtrer par conflit</div>
+      <div class="filters" id="filters">
+        <button class="filter-btn active" data-cat="tous">Tous</button>
+      </div>
+    </div>
+
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search" placeholder="Rechercher un article, une région, un mot-clé..."/>
+    </div>
+
+    <div id="error-container"></div>
+    <div id="articles-container">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Chargement des articles...</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-text">Conflits.Monde — Agrégateur automatisé — Sources vérifiées — Mise à jour toutes les 6h</div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // CONFIGURATION — Remplace par tes vraies valeurs
+    // ============================================================
+    const AIRTABLE_TOKEN = 'TON_TOKEN_AIRTABLE_ICI';
+    const BASE_ID = 'appFPxjIG6jk3GGO4';
+    const TABLE_NAME = 'ConteneurArticles';
+    // ============================================================
+
+    let allArticles = [];
+    let currentFilter = 'tous';
+    let searchQuery = '';
+
+    const categoryColors = {
+      'Israël-Palestine': '#c8102e',
+      'Ukraine-Russie': '#3b82f6',
+      'Sahel': '#f59e0b',
+      'Soudan': '#ef4444',
+      'Yémen': '#8b5cf6',
+      'Syrie': '#06b6d4',
+      'Afghanistan': '#84cc16',
+      'Myanmar': '#f97316',
+      'Congo': '#ec4899',
+      'Somalie': '#14b8a6',
+      'Asie': '#6366f1',
+      'Jihadisme': '#dc2626',
+      'Autres Conflits': '#6b7280'
+    };
+
+    async function fetchArticles() {
+      const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`;
+      
+      try {
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${AIRTABLE_TOKEN}` }
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error?.message || `Erreur ${res.status}`);
+        }
+
+        const data = await res.json();
+        return data.records.map(r => r.fields);
+      } catch (e) {
+        throw e;
+      }
+    }
+
+    function buildFilters(articles) {
+      const cats = [...new Set(articles.map(a => a['Catégorie']).filter(Boolean))].sort();
+      const container = document.getElementById('filters');
+      container.innerHTML = `<button class="filter-btn active" data-cat="tous">Tous (${articles.length})</button>`;
+      
+      cats.forEach(cat => {
+        const count = articles.filter(a => a['Catégorie'] === cat).length;
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.dataset.cat = cat;
+        btn.textContent = `${cat} (${count})`;
+        container.appendChild(btn);
+      });
+
+      container.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.dataset.cat;
+          renderArticles();
+        });
+      });
+    }
+
+    function updateStats(articles) {
+      document.getElementById('stat-total').textContent = articles.length;
+      const cats = new Set(articles.map(a => a['Catégorie']).filter(Boolean));
+      document.getElementById('stat-categories').textContent = cats.size;
+      
+      const dates = articles.map(a => a['Date']).filter(Boolean);
+      if (dates.length > 0) {
+        document.getElementById('stat-update').textContent = 'Aujourd\'hui';
+      }
+    }
+
+    function updateBreakingBar(articles) {
+      const latest = articles.slice(0, 5).map(a => a['Titre']).join('  ///  ');
+      document.getElementById('breaking-text').textContent = latest || 'Aucun article récent';
+    }
+
+    function renderArticles() {
+      const container = document.getElementById('articles-container');
+      
+      let filtered = allArticles;
+      if (currentFilter !== 'tous') {
+        filtered = filtered.filter(a => a['Catégorie'] === currentFilter);
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(a =>
+          (a['Titre'] || '').toLowerCase().includes(q) ||
+          (a['Résumé'] || '').toLowerCase().includes(q) ||
+          (a['Source'] || '').toLowerCase().includes(q) ||
+          (a['Catégorie'] || '').toLowerCase().includes(q)
+        );
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="empty">Aucun article trouvé</div>`;
+        return;
+      }
+
+      container.innerHTML = `<div class="articles-grid">${filtered.map((a, i) => createCard(a, i)).join('')}</div>`;
+    }
+
+    function createCard(article, index) {
+      const titre = article['Titre'] || 'Sans titre';
+      const resume = article['Résumé'] || '';
+      const source = article['Source'] || 'Source inconnue';
+      const categorie = article['Catégorie'] || 'Autres';
+      const url = article['URL'] || '#';
+      const date = article['Date'] || '';
+      const score = article['Score Fiabilité'] || 65;
+      const color = categoryColors[categorie] || '#6b7280';
+      const delay = (index % 12) * 0.05;
+
+      return `
+        <div class="article-card" style="animation-delay: ${delay}s">
+          <div class="card-header">
+            <div class="card-category" style="border-color: ${color}; color: ${color}; background: ${color}18">
+              ${categorie}
+            </div>
+            <div class="card-score">
+              <div class="score-bar">
+                <div class="score-fill" style="width: ${score}%"></div>
+              </div>
+              <div class="score-num">${score}/100</div>
+            </div>
+          </div>
+          <div class="card-title">${titre}</div>
+          ${resume ? `<div class="card-resume">${resume}</div>` : ''}
+          <div class="card-footer">
+            <div class="card-meta">
+              <div class="card-source">${source}</div>
+              <div class="card-date">${date}</div>
+            </div>
+            <a href="${url}" target="_blank" rel="noopener" class="card-link">
+              LIRE →
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    // Search
+    document.getElementById('search').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      renderArticles();
+    });
+
+    // Init
+    async function init() {
+      try {
+        allArticles = await fetchArticles();
+        buildFilters(allArticles);
+        updateStats(allArticles);
+        updateBreakingBar(allArticles);
+        renderArticles();
+      } catch (e) {
+        document.getElementById('error-container').innerHTML = `
+          <div class="error-box">
+            ⚠️ Erreur de connexion à Airtable : ${e.message}<br><br>
+            Vérifie que ton token Airtable est bien renseigné dans le fichier HTML (ligne AIRTABLE_TOKEN).
+          </div>
+        `;
+        document.getElementById('articles-container').innerHTML = '';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

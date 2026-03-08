@@ -310,26 +310,42 @@
       letter-spacing: 0.1em;
     }
 
-    /* ── GRID ── */
-    .articles-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-    }
+/* ── GRID ── */
+.articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-rows: repeat(3, 220px);
+  gap: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
 
     /* ── CARD ── */
-    .card {
-      background: var(--card);
-      padding: 1.2rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-      animation: fadeUp 0.4s ease forwards;
-      opacity: 0;
-      cursor: pointer;
-    }
+.card {
+  background: var(--card);
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  height: 220px;
+}
+.card-inner {
+  position: absolute;
+  inset: 0;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  background: var(--card);
+}
+.card-inner.visible {
+  opacity: 1;
+}
     .card:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(26,63,160,0.12);
@@ -724,69 +740,118 @@
     }
 
     // ── RENDER ──
-    function renderArticles() {
-      const container = document.getElementById('articles-container');
-      let list = [...allArticles];
+function renderArticles() {
+  const container = document.getElementById('articles-container');
+  let list = [...allArticles];
 
-      if (currentCat === 'alerte') {
-        list = list.filter(a => alerteCategories.includes(a['Catégorie']));
-      } else if (currentCat !== 'tous') {
-        list = list.filter(a => a['Catégorie'] === currentCat);
+  if (currentCat === 'alerte') {
+    list = list.filter(a => alerteCategories.includes(a['Catégorie']));
+  } else if (currentCat !== 'tous') {
+    list = list.filter(a => a['Catégorie'] === currentCat);
+  }
+
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(a =>
+      (a['Titre'] || '').toLowerCase().includes(q) ||
+      (a['Résumé'] || '').toLowerCase().includes(q) ||
+      (a['Source'] || '').toLowerCase().includes(q)
+    );
+  }
+
+  document.getElementById('section-count').textContent = `${list.length} article${list.length > 1 ? 's' : ''}`;
+
+  if (!list.length) {
+    container.innerHTML = `<div class="empty">Aucun article trouvé</div>`;
+    return;
+  }
+
+  // Mélanger aléatoirement
+  list = list.sort(() => Math.random() - 0.5);
+
+  // Créer exactement 15 slots (3 lignes × 5 colonnes max)
+  const SLOTS = 15;
+  const grid = document.createElement('div');
+  grid.className = 'articles-grid';
+
+  for (let i = 0; i < SLOTS; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'card';
+
+    // Chaque slot a sa propre liste d'articles décalée
+    const slotArticles = [...list.slice(i % list.length), ...list.slice(0, i % list.length)];
+
+    let current = 0;
+
+    // Créer deux layers pour la transition
+    const innerA = document.createElement('div');
+    innerA.className = 'card-inner visible';
+    innerA.innerHTML = buildCardInner(slotArticles[0]);
+
+    const innerB = document.createElement('div');
+    innerB.className = 'card-inner';
+    innerB.innerHTML = buildCardInner(slotArticles[1] || slotArticles[0]);
+
+    slot.appendChild(innerA);
+    slot.appendChild(innerB);
+
+    // Rotation automatique avec délai aléatoire
+    const delay = 3000 + Math.random() * 2000;
+    let showingA = true;
+
+    setInterval(() => {
+      current = (current + 1) % slotArticles.length;
+      const next = slotArticles[(current + 1) % slotArticles.length];
+
+      if (showingA) {
+        innerB.innerHTML = buildCardInner(next);
+        innerA.classList.remove('visible');
+        innerB.classList.add('visible');
+      } else {
+        innerA.innerHTML = buildCardInner(next);
+        innerB.classList.remove('visible');
+        innerA.classList.add('visible');
       }
+      showingA = !showingA;
 
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        list = list.filter(a =>
-          (a['Titre'] || '').toLowerCase().includes(q) ||
-          (a['Résumé'] || '').toLowerCase().includes(q) ||
-          (a['Source'] || '').toLowerCase().includes(q)
-        );
-      }
+      // Clic sur le slot ouvre l'article actuel
+      slot.onclick = () => {
+        const url = slotArticles[current]['URL'] || '#';
+        window.open(url, '_blank');
+      };
+    }, delay);
 
-      document.getElementById('section-count').textContent = `${list.length} article${list.length > 1 ? 's' : ''}`;
+    slot.onclick = () => window.open(slotArticles[0]['URL'] || '#', '_blank');
+    grid.appendChild(slot);
+  }
 
-      if (!list.length) {
-        container.innerHTML = `<div class="empty">Aucun article trouvé</div>`;
-        return;
-      }
+  container.innerHTML = '';
+  container.appendChild(grid);
+}
 
-      const cards = list.map((a, i) => buildCard(a, i)).join('');
-      container.innerHTML = `<div class="articles-grid">${cards}</div>`;
-    }
 
-    function buildCard(a, i) {
-      const titre   = (a['Titre'] || 'Sans titre').replace(/</g, '&lt;');
-      const resume  = (a['Résumé'] || '').replace(/<[^>]*>/g, '').replace(/</g, '&lt;');
-      const source  = a['Source'] || '—';
-      const cat     = a['Catégorie'] || 'Autres';
-      const url     = a['URL'] || '#';
-      const date    = a['Date'] || '';
-      const score   = parseInt(a['Score Fiabilité']) || 65;
-      const isAlert = alerteCategories.includes(cat);
-      const featured = i === 0 ? 'featured' : '';
-      const delay   = (i % 9) * 0.05;
+function buildCardInner(a) {
+  if (!a) return '';
+  const titre  = (a['Titre'] || 'Sans titre').replace(/</g, '&lt;');
+  const resume = (a['Résumé'] || '').replace(/<[^>]*>/g, '').substring(0, 120);
+  const source = a['Source'] || '—';
+  const cat    = a['Catégorie'] || 'Autres';
+  const url    = a['URL'] || '#';
+  const score  = parseInt(a['Score Fiabilité']) || 65;
+  const isAlert = alerteCategories.includes(cat);
 
-      return `
-        <div class="card ${featured}" style="animation-delay:${delay}s" onclick="window.open('${url}','_blank')">
-          <div class="card-top">
-            <div class="card-cat ${isAlert ? 'alerte' : ''}">${cat}</div>
-            <div class="card-score-wrap">
-              <div class="score-track"><div class="score-fill" style="width:${score}%"></div></div>
-              <div class="score-txt">${score}</div>
-            </div>
-          </div>
-          <div class="card-title">${titre}</div>
-          ${resume ? `<div class="card-resume">${resume}</div>` : ''}
-          <div class="card-footer">
-            <div class="card-source-wrap">
-              <div class="card-source">${source}</div>
-              <div class="card-date">${date}</div>
-            </div>
-            <a href="${url}" target="_blank" rel="noopener" class="card-link" onclick="event.stopPropagation()">LIRE →</a>
-          </div>
-        </div>`;
-    }
-
+  return `
+    <div class="card-top">
+      <div class="card-cat ${isAlert ? 'alerte' : ''}">${cat}</div>
+      <div class="score-txt">${score}/100</div>
+    </div>
+    <div class="card-title">${titre}</div>
+    ${resume ? `<div class="card-resume">${resume}</div>` : ''}
+    <div class="card-footer">
+      <div class="card-source">${source}</div>
+      <a href="${url}" target="_blank" rel="noopener" class="card-link" onclick="event.stopPropagation()">LIRE →</a>
+    </div>`;
+}
     // ── SEARCH ──
     document.getElementById('search').addEventListener('input', e => {
       searchQuery = e.target.value;

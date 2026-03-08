@@ -1,22 +1,42 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Conflits Armés — Veille Mondiale</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <title>HowTheyWar — Veille des Conflits Armés</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --bg: #0a0a0a;
-      --bg2: #111111;
-      --bg3: #1a1a1a;
+      --bg: #f4f2ed;
+      --bg2: #ffffff;
+      --bg3: #e8e5de;
+      --border: #d0ccc3;
+      --blue: #1a3fa0;
+      --blue2: #2452c8;
+      --blue-light: #e8edf8;
+      --red: #cc1122;
+      --red-light: #ffeef0;
+      --text: #0f0f0f;
+      --text2: #444444;
+      --text3: #888888;
+      --card: #ffffff;
+      --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    [data-theme="dark"] {
+      --bg: #0d0d0d;
+      --bg2: #141414;
+      --bg3: #1e1e1e;
       --border: #2a2a2a;
-      --accent: #c8102e;
-      --accent2: #ff6b35;
-      --text: #e8e0d4;
-      --text2: #8a8278;
-      --text3: #5a5550;
-      --card-bg: #131313;
+      --blue: #4a7fff;
+      --blue2: #6b99ff;
+      --blue-light: #0d1a3a;
+      --red: #ff3344;
+      --red-light: #2a0a0d;
+      --text: #f0ede8;
+      --text2: #aaaaaa;
+      --text3: #666666;
+      --card: #181818;
+      --shadow: 0 2px 12px rgba(0,0,0,0.4);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,344 +44,367 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'IBM Plex Sans', sans-serif;
+      font-family: 'Barlow', sans-serif;
       min-height: 100vh;
-      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
     }
 
-    /* Grain overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 1000;
-      opacity: 0.4;
+    /* ── TICKER ── */
+    .ticker-wrap {
+      background: var(--blue);
+      color: white;
+      overflow: hidden;
+      height: 36px;
+      display: flex;
+      align-items: center;
     }
+    .ticker-label {
+      background: var(--red);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 0 1rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+      z-index: 2;
+    }
+    .ticker-track {
+      display: flex;
+      gap: 4rem;
+      animation: ticker 40s linear infinite;
+      white-space: nowrap;
+      padding-left: 2rem;
+    }
+    .ticker-track:hover { animation-play-state: paused; }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    .ticker-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .ticker-dot { width: 5px; height: 5px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
 
-    /* Header */
+    /* ── HEADER ── */
     header {
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
+      background: var(--bg2);
+      border-bottom: 3px solid var(--blue);
       position: sticky;
       top: 0;
-      background: rgba(10,10,10,0.95);
-      backdrop-filter: blur(10px);
       z-index: 100;
+      box-shadow: var(--shadow);
     }
-
-    .header-inner {
+    .header-top {
       max-width: 1400px;
       margin: 0 auto;
+      padding: 0.8rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1.2rem 0;
+      gap: 1rem;
     }
-
-    .logo {
+    .logo-wrap {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 1px;
     }
-
-    .logo-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 900;
-      letter-spacing: -0.02em;
+    .logo-main {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
       color: var(--text);
+      line-height: 1;
     }
-
-    .logo-title span {
-      color: var(--accent);
-    }
-
+    .logo-main span { color: var(--blue); }
     .logo-sub {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--text3);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-
-    .header-meta {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .live-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: 'IBM Plex Mono', monospace;
+      font-family: 'Barlow Condensed', sans-serif;
       font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
       color: var(--text3);
-      letter-spacing: 0.1em;
     }
-
-    .live-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #22c55e;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    /* Breaking bar */
-    .breaking-bar {
-      background: var(--accent);
-      padding: 0.5rem 2rem;
+    .header-right {
       display: flex;
       align-items: center;
       gap: 1rem;
-      overflow: hidden;
     }
-
-    .breaking-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      background: rgba(0,0,0,0.3);
-      padding: 0.2rem 0.5rem;
-    }
-
-    .breaking-text {
-      font-size: 0.8rem;
-      white-space: nowrap;
-      animation: scroll-left 30s linear infinite;
-    }
-
-    @keyframes scroll-left {
-      0% { transform: translateX(100vw); }
-      100% { transform: translateX(-100%); }
-    }
-
-    /* Main layout */
-    main {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    /* Stats bar */
-    .stats-bar {
+    .live-pill {
       display: flex;
       align-items: center;
-      gap: 2rem;
-      padding: 1.2rem 0;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .stat {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .stat-value {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .stat-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--text3);
+      gap: 0.4rem;
+      background: var(--red-light);
+      border: 1px solid var(--red);
+      color: var(--red);
+      padding: 0.3rem 0.8rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
       letter-spacing: 0.1em;
-      text-transform: uppercase;
+      font-weight: 600;
     }
-
-    .stat-divider {
-      width: 1px;
-      height: 40px;
-      background: var(--border);
+    .live-dot {
+      width: 7px; height: 7px;
+      background: var(--red);
+      border-radius: 50%;
+      animation: blink 1.2s ease-in-out infinite;
     }
-
-    /* Filters */
-    .filters-section {
-      margin-bottom: 2rem;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
     }
-
-    .filters-label {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--text3);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-
-    .filter-btn {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      padding: 0.4rem 0.9rem;
+    .theme-toggle {
+      background: var(--bg3);
       border: 1px solid var(--border);
+      color: var(--text2);
+      width: 36px; height: 36px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover { background: var(--blue); color: white; border-color: var(--blue); }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.75rem 1.2rem;
+      border: none;
       background: transparent;
       color: var(--text2);
       cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
       transition: all 0.2s;
-      letter-spacing: 0.05em;
-    }
-
-    .filter-btn:hover {
-      border-color: var(--accent);
-      color: var(--text);
-    }
-
-    .filter-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
-    }
-
-    /* Search */
-    .search-bar {
-      margin-bottom: 2rem;
       position: relative;
     }
+    .nav-btn:hover { color: var(--blue); }
+    .nav-btn.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+    }
+    .nav-btn .count {
+      font-size: 0.6rem;
+      background: var(--blue-light);
+      color: var(--blue);
+      padding: 1px 5px;
+      margin-left: 4px;
+      font-weight: 700;
+    }
+    .nav-btn.alerte .count { background: var(--red-light); color: var(--red); }
 
+    /* ── MAIN ── */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-row {
+      display: flex;
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 1.5rem;
+    }
+    .stat-box {
+      background: var(--card);
+      padding: 1rem 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .stat-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--blue);
+      line-height: 1;
+    }
+    .stat-lbl {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    /* ── SEARCH ── */
+    .search-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .search-wrap {
+      flex: 1;
+      position: relative;
+    }
     .search-input {
       width: 100%;
-      background: var(--bg3);
-      border: 1px solid var(--border);
+      background: var(--card);
+      border: 2px solid var(--border);
       color: var(--text);
-      padding: 0.8rem 1rem 0.8rem 2.5rem;
-      font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 0.85rem;
+      padding: 0.75rem 1rem 0.75rem 2.8rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.9rem;
       outline: none;
       transition: border-color 0.2s;
     }
-
-    .search-input:focus {
-      border-color: var(--accent);
-    }
-
-    .search-input::placeholder {
-      color: var(--text3);
-    }
-
+    .search-input:focus { border-color: var(--blue); }
+    .search-input::placeholder { color: var(--text3); }
     .search-icon {
       position: absolute;
-      left: 0.8rem;
+      left: 0.9rem;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text3);
-      font-size: 0.9rem;
     }
 
-    /* Grid */
+    /* ── CAROUSEL GRID ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      color: var(--text);
+    }
+    .section-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+    }
+    .section-count {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── GRID ── */
     .articles-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 1px;
       background: var(--border);
     }
 
-    /* Article card */
-    .article-card {
-      background: var(--card-bg);
-      padding: 1.5rem;
-      transition: background 0.2s;
-      animation: fadeIn 0.4s ease forwards;
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeUp 0.4s ease forwards;
       opacity: 0;
+      cursor: pointer;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(26,63,160,0.12);
+      z-index: 1;
+      position: relative;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .article-card:hover {
-      background: var(--bg3);
-    }
-
-    .card-header {
+    .card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
     }
-
-    .card-category {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
+    .card-cat {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 0.25rem 0.6rem;
-      border-left: 2px solid var(--accent);
-      color: var(--accent2);
-      background: rgba(200,16,46,0.08);
+      padding: 0.2rem 0.6rem;
+      background: var(--blue-light);
+      color: var(--blue);
+      border-left: 3px solid var(--blue);
     }
-
-    .card-score {
+    .card-cat.alerte {
+      background: var(--red-light);
+      color: var(--red);
+      border-left-color: var(--red);
+    }
+    .card-score-wrap {
       display: flex;
       align-items: center;
       gap: 0.4rem;
     }
-
-    .score-bar {
-      width: 40px;
-      height: 3px;
+    .score-track {
+      width: 36px; height: 3px;
       background: var(--border);
-      border-radius: 2px;
       overflow: hidden;
     }
-
     .score-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      border-radius: 2px;
+      background: var(--blue);
     }
-
-    .score-num {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
+    .score-txt {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
       color: var(--text3);
+      font-weight: 600;
     }
 
     .card-title {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Barlow Condensed', sans-serif;
       font-size: 1.05rem;
       font-weight: 700;
-      line-height: 1.35;
+      line-height: 1.3;
       color: var(--text);
-      margin-bottom: 0.8rem;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
+    .card-title:hover { color: var(--blue); }
 
     .card-resume {
       font-size: 0.78rem;
       color: var(--text2);
-      line-height: 1.6;
-      margin-bottom: 1.2rem;
+      line-height: 1.55;
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      flex: 1;
     }
 
     .card-footer {
@@ -369,367 +412,398 @@
       align-items: center;
       justify-content: space-between;
       border-top: 1px solid var(--border);
-      padding-top: 1rem;
+      padding-top: 0.8rem;
     }
-
-    .card-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
+    .card-source-wrap { display: flex; flex-direction: column; gap: 2px; }
     .card-source {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--text);
-      font-weight: 500;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
-
     .card-date {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
       color: var(--text3);
     }
-
     .card-link {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.65rem;
-      color: var(--accent);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: white;
+      background: var(--blue);
+      padding: 0.3rem 0.8rem;
       text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      transition: color 0.2s;
-      letter-spacing: 0.05em;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .card-link:hover { background: var(--blue2); }
+
+    /* FEATURED CARD (first item) */
+    .card.featured {
+      grid-column: span 2;
+      grid-row: span 2;
+      padding: 2rem;
+    }
+    .card.featured .card-title {
+      font-size: 1.6rem;
+      -webkit-line-clamp: 4;
+    }
+    .card.featured .card-resume {
+      -webkit-line-clamp: 4;
+      font-size: 0.85rem;
     }
 
-    .card-link:hover {
-      color: var(--accent2);
-    }
-
-    /* Loading */
+    /* ── LOADING ── */
     .loading {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 5rem 2rem;
-      gap: 1.5rem;
+      gap: 1rem;
     }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 2px solid var(--border);
-      border-top-color: var(--accent);
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--blue);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      animation: spin 0.7s linear infinite;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .loading-text {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text3);
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-txt {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-    }
-
-    /* Empty */
-    .empty {
-      text-align: center;
-      padding: 5rem 2rem;
       color: var(--text3);
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
     }
 
-    /* Error */
+    /* ── ERROR ── */
     .error-box {
-      background: rgba(200,16,46,0.08);
-      border: 1px solid rgba(200,16,46,0.3);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.75rem;
-      color: var(--accent2);
+      background: var(--red-light);
+      border-left: 4px solid var(--red);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.85rem;
+      color: var(--red);
       line-height: 1.6;
     }
 
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--border);
-      margin-top: 4rem;
-      padding: 2rem;
+    /* ── EMPTY ── */
+    .empty {
       text-align: center;
-    }
-
-    .footer-text {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 0.6rem;
+      padding: 4rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
       color: var(--text3);
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .articles-grid {
-        grid-template-columns: 1fr;
-      }
-      .header-meta { display: none; }
-      .stats-bar { gap: 1rem; }
+    /* ── FOOTER ── */
+    footer {
+      border-top: 3px solid var(--blue);
+      background: var(--bg2);
+      padding: 2rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      color: var(--text);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    .footer-logo span { color: var(--blue); }
+    .footer-txt {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      color: var(--text3);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .articles-grid { grid-template-columns: repeat(2, 1fr); }
+      .card.featured { grid-column: span 2; grid-row: span 1; }
+      .stats-row { flex-wrap: wrap; }
+      .stat-box { min-width: 45%; }
+    }
+    @media (max-width: 600px) {
+      .articles-grid { grid-template-columns: 1fr; }
+      .card.featured { grid-column: span 1; }
+      .header-top { padding: 0.8rem 1rem; }
+      main { padding: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="header-inner">
-      <div class="logo">
-        <div class="logo-title">Conflits<span>.</span>Monde</div>
-        <div class="logo-sub">Veille des conflits armés — Mise à jour automatique</div>
-      </div>
-      <div class="header-meta">
-        <div class="live-badge">
-          <div class="live-dot"></div>
-          <span>FLUX EN DIRECT</span>
-        </div>
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-label">⚡ ALERTE</div>
+    <div style="overflow:hidden; flex:1;">
+      <div class="ticker-track" id="ticker-track">
+        <span class="ticker-item"><span class="ticker-dot"></span>Chargement des dernières actualités...</span>
+        <span class="ticker-item"><span class="ticker-dot"></span>Chargement des dernières actualités...</span>
       </div>
     </div>
-  </header>
-
-  <div class="breaking-bar">
-    <span class="breaking-label">⚡ Actif</span>
-    <span class="breaking-text" id="breaking-text">Chargement des dernières actualités...</span>
   </div>
 
+  <!-- HEADER -->
+  <header>
+    <div class="header-top">
+      <div class="logo-wrap">
+        <div class="logo-main">How<span>They</span>War</div>
+        <div class="logo-sub">Veille mondiale des conflits armés — Mise à jour automatique</div>
+      </div>
+      <div class="header-right">
+        <div class="live-pill">
+          <div class="live-dot"></div>
+          LIVE
+        </div>
+        <button class="theme-toggle" id="themeBtn" title="Changer le thème">🌙</button>
+      </div>
+    </div>
+
+    <!-- NAV -->
+    <nav>
+      <div class="nav-inner" id="nav-inner">
+        <button class="nav-btn active" data-cat="tous">
+          Tous <span class="count" id="nav-count-tous">—</span>
+        </button>
+        <button class="nav-btn alerte" data-cat="alerte">
+          🔴 Alertes <span class="count alerte" id="nav-count-alerte">—</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
   <main>
-    <div class="stats-bar">
-      <div class="stat">
-        <div class="stat-value" id="stat-total">—</div>
-        <div class="stat-label">Articles collectés</div>
+
+    <!-- STATS -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-box">
+        <div class="stat-val" id="stat-total">—</div>
+        <div class="stat-lbl">Articles collectés</div>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <div class="stat-value" id="stat-sources">9</div>
-        <div class="stat-label">Sources actives</div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-sources">9</div>
+        <div class="stat-lbl">Sources actives</div>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <div class="stat-value" id="stat-categories">—</div>
-        <div class="stat-label">Conflits couverts</div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-cats">—</div>
+        <div class="stat-lbl">Conflits couverts</div>
       </div>
-      <div class="stat-divider"></div>
-      <div class="stat">
-        <div class="stat-value" id="stat-update">—</div>
-        <div class="stat-label">Dernière mise à jour</div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-update">—</div>
+        <div class="stat-lbl">Dernière mise à jour</div>
       </div>
     </div>
 
-    <div class="filters-section">
-      <div class="filters-label">Filtrer par conflit</div>
-      <div class="filters" id="filters">
-        <button class="filter-btn active" data-cat="tous">Tous</button>
+    <!-- SEARCH -->
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="search" placeholder="Rechercher un conflit, un pays, un mot-clé..."/>
       </div>
     </div>
 
-    <div class="search-bar">
-      <span class="search-icon">🔍</span>
-      <input type="text" class="search-input" id="search" placeholder="Rechercher un article, une région, un mot-clé..."/>
+    <!-- SECTION HEADER -->
+    <div class="section-header">
+      <div class="section-title" id="section-title">Tous les articles</div>
+      <div class="section-line"></div>
+      <div class="section-count" id="section-count">—</div>
     </div>
 
     <div id="error-container"></div>
     <div id="articles-container">
       <div class="loading">
-        <div class="loading-spinner"></div>
-        <div class="loading-text">Chargement des articles...</div>
+        <div class="spinner"></div>
+        <div class="loading-txt">Connexion à la base de données...</div>
       </div>
     </div>
+
   </main>
 
   <footer>
-    <div class="footer-text">Conflits.Monde — Agrégateur automatisé — Sources vérifiées — Mise à jour toutes les 6h</div>
+    <div class="footer-logo">How<span>They</span>War</div>
+    <div class="footer-txt">Agrégateur automatisé · Sources vérifiées · Mise à jour toutes les 6h · Conflits armés mondiaux</div>
   </footer>
 
   <script>
-    // ============================================================
-    // CONFIGURATION — Remplace par tes vraies valeurs
-    // ============================================================
+    // ════════════════════════════════════════════════
+    // CONFIG
+    // ════════════════════════════════════════════════
     const AIRTABLE_TOKEN = 'patIAAi7qHfoEFRpA.f670fa21fc99ff527906af49c93052c8e1dd4e0606f2b2eeb26a2b2174d0a1c7';
-    const BASE_ID = 'appFPxjIG6jk3GGO4';
-    const TABLE_NAME = 'ConteneurArticles';
-    // ============================================================
+    const BASE_ID        = 'appFPxjIG6jk3GGO4';
+    const TABLE_NAME     = 'ConteneurArticles';
+    // ════════════════════════════════════════════════
 
     let allArticles = [];
-    let currentFilter = 'tous';
+    let currentCat  = 'tous';
     let searchQuery = '';
 
-    const categoryColors = {
-      'Israël-Palestine': '#c8102e',
-      'Ukraine-Russie': '#3b82f6',
-      'Sahel': '#f59e0b',
-      'Soudan': '#ef4444',
-      'Yémen': '#8b5cf6',
-      'Syrie': '#06b6d4',
-      'Afghanistan': '#84cc16',
-      'Myanmar': '#f97316',
-      'Congo': '#ec4899',
-      'Somalie': '#14b8a6',
-      'Asie': '#6366f1',
-      'Jihadisme': '#dc2626',
-      'Autres Conflits': '#6b7280'
-    };
+    const alerteCategories = ['Israël-Palestine', 'Ukraine-Russie', 'Soudan', 'Yémen'];
 
+    // ── THEME ──
+    const themeBtn = document.getElementById('themeBtn');
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      themeBtn.textContent = isDark ? '🌙' : '☀️';
+    });
+
+    // ── FETCH ──
     async function fetchArticles() {
       const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?pageSize=100&sort[0][field]=Date&sort[0][direction]=desc`;
-      
-      try {
-        const res = await fetch(url, {
-          headers: { 'Authorization': `Bearer ${AIRTABLE_TOKEN}` }
-        });
-
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error?.message || `Erreur ${res.status}`);
-        }
-
-        const data = await res.json();
-        return data.records.map(r => r.fields);
-      } catch (e) {
-        throw e;
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` } });
+      if (!res.ok) {
+        const e = await res.json();
+        throw new Error(e.error?.message || `Erreur ${res.status}`);
       }
+      const data = await res.json();
+      return data.records.map(r => r.fields);
     }
 
-    function buildFilters(articles) {
+    // ── TICKER ──
+    function buildTicker(articles) {
+      const items = articles.slice(0, 8).map(a =>
+        `<span class="ticker-item"><span class="ticker-dot"></span>${a['Titre'] || ''}</span>`
+      ).join('');
+      const track = document.getElementById('ticker-track');
+      track.innerHTML = items + items; // double pour boucle continue
+    }
+
+    // ── NAV ──
+    function buildNav(articles) {
       const cats = [...new Set(articles.map(a => a['Catégorie']).filter(Boolean))].sort();
-      const container = document.getElementById('filters');
-      container.innerHTML = `<button class="filter-btn active" data-cat="tous">Tous (${articles.length})</button>`;
-      
+      const nav = document.getElementById('nav-inner');
+
+      // Update counts
+      document.getElementById('nav-count-tous').textContent = articles.length;
+      const alertCount = articles.filter(a => alerteCategories.includes(a['Catégorie'])).length;
+      document.getElementById('nav-count-alerte').textContent = alertCount;
+
+      // Add category buttons
       cats.forEach(cat => {
+        if (nav.querySelector(`[data-cat="${cat}"]`)) return;
         const count = articles.filter(a => a['Catégorie'] === cat).length;
         const btn = document.createElement('button');
-        btn.className = 'filter-btn';
+        btn.className = 'nav-btn';
         btn.dataset.cat = cat;
-        btn.textContent = `${cat} (${count})`;
-        container.appendChild(btn);
+        btn.innerHTML = `${cat} <span class="count">${count}</span>`;
+        nav.appendChild(btn);
       });
 
-      container.querySelectorAll('.filter-btn').forEach(btn => {
+      nav.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          nav.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          currentFilter = btn.dataset.cat;
+          currentCat = btn.dataset.cat;
+          document.getElementById('section-title').textContent =
+            currentCat === 'tous' ? 'Tous les articles' :
+            currentCat === 'alerte' ? '🔴 Alertes actives' : currentCat;
           renderArticles();
         });
       });
     }
 
+    // ── STATS ──
     function updateStats(articles) {
       document.getElementById('stat-total').textContent = articles.length;
       const cats = new Set(articles.map(a => a['Catégorie']).filter(Boolean));
-      document.getElementById('stat-categories').textContent = cats.size;
-      
-      const dates = articles.map(a => a['Date']).filter(Boolean);
-      if (dates.length > 0) {
-        document.getElementById('stat-update').textContent = 'Aujourd\'hui';
-      }
+      document.getElementById('stat-cats').textContent = cats.size;
+      document.getElementById('stat-update').textContent = 'Aujourd\'hui';
     }
 
-    function updateBreakingBar(articles) {
-      const latest = articles.slice(0, 5).map(a => a['Titre']).join('  ///  ');
-      document.getElementById('breaking-text').textContent = latest || 'Aucun article récent';
-    }
-
+    // ── RENDER ──
     function renderArticles() {
       const container = document.getElementById('articles-container');
-      
-      let filtered = allArticles;
-      if (currentFilter !== 'tous') {
-        filtered = filtered.filter(a => a['Catégorie'] === currentFilter);
+      let list = [...allArticles];
+
+      if (currentCat === 'alerte') {
+        list = list.filter(a => alerteCategories.includes(a['Catégorie']));
+      } else if (currentCat !== 'tous') {
+        list = list.filter(a => a['Catégorie'] === currentCat);
       }
+
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
-        filtered = filtered.filter(a =>
+        list = list.filter(a =>
           (a['Titre'] || '').toLowerCase().includes(q) ||
           (a['Résumé'] || '').toLowerCase().includes(q) ||
-          (a['Source'] || '').toLowerCase().includes(q) ||
-          (a['Catégorie'] || '').toLowerCase().includes(q)
+          (a['Source'] || '').toLowerCase().includes(q)
         );
       }
 
-      if (filtered.length === 0) {
+      document.getElementById('section-count').textContent = `${list.length} article${list.length > 1 ? 's' : ''}`;
+
+      if (!list.length) {
         container.innerHTML = `<div class="empty">Aucun article trouvé</div>`;
         return;
       }
 
-      container.innerHTML = `<div class="articles-grid">${filtered.map((a, i) => createCard(a, i)).join('')}</div>`;
+      const cards = list.map((a, i) => buildCard(a, i)).join('');
+      container.innerHTML = `<div class="articles-grid">${cards}</div>`;
     }
 
-    function createCard(article, index) {
-      const titre = article['Titre'] || 'Sans titre';
-      const resume = article['Résumé'] || '';
-      const source = article['Source'] || 'Source inconnue';
-      const categorie = article['Catégorie'] || 'Autres';
-      const url = article['URL'] || '#';
-      const date = article['Date'] || '';
-      const score = article['Score Fiabilité'] || 65;
-      const color = categoryColors[categorie] || '#6b7280';
-      const delay = (index % 12) * 0.05;
+    function buildCard(a, i) {
+      const titre   = (a['Titre'] || 'Sans titre').replace(/</g, '&lt;');
+      const resume  = (a['Résumé'] || '').replace(/<[^>]*>/g, '').replace(/</g, '&lt;');
+      const source  = a['Source'] || '—';
+      const cat     = a['Catégorie'] || 'Autres';
+      const url     = a['URL'] || '#';
+      const date    = a['Date'] || '';
+      const score   = parseInt(a['Score Fiabilité']) || 65;
+      const isAlert = alerteCategories.includes(cat);
+      const featured = i === 0 ? 'featured' : '';
+      const delay   = (i % 9) * 0.05;
 
       return `
-        <div class="article-card" style="animation-delay: ${delay}s">
-          <div class="card-header">
-            <div class="card-category" style="border-color: ${color}; color: ${color}; background: ${color}18">
-              ${categorie}
-            </div>
-            <div class="card-score">
-              <div class="score-bar">
-                <div class="score-fill" style="width: ${score}%"></div>
-              </div>
-              <div class="score-num">${score}/100</div>
+        <div class="card ${featured}" style="animation-delay:${delay}s" onclick="window.open('${url}','_blank')">
+          <div class="card-top">
+            <div class="card-cat ${isAlert ? 'alerte' : ''}">${cat}</div>
+            <div class="card-score-wrap">
+              <div class="score-track"><div class="score-fill" style="width:${score}%"></div></div>
+              <div class="score-txt">${score}</div>
             </div>
           </div>
           <div class="card-title">${titre}</div>
           ${resume ? `<div class="card-resume">${resume}</div>` : ''}
           <div class="card-footer">
-            <div class="card-meta">
+            <div class="card-source-wrap">
               <div class="card-source">${source}</div>
               <div class="card-date">${date}</div>
             </div>
-            <a href="${url}" target="_blank" rel="noopener" class="card-link">
-              LIRE →
-            </a>
+            <a href="${url}" target="_blank" rel="noopener" class="card-link" onclick="event.stopPropagation()">LIRE →</a>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
-    // Search
+    // ── SEARCH ──
     document.getElementById('search').addEventListener('input', e => {
       searchQuery = e.target.value;
       renderArticles();
     });
 
-    // Init
+    // ── INIT ──
     async function init() {
       try {
         allArticles = await fetchArticles();
-        buildFilters(allArticles);
+        buildTicker(allArticles);
+        buildNav(allArticles);
         updateStats(allArticles);
-        updateBreakingBar(allArticles);
         renderArticles();
-      } catch (e) {
+      } catch(e) {
         document.getElementById('error-container').innerHTML = `
-          <div class="error-box">
-            ⚠️ Erreur de connexion à Airtable : ${e.message}<br><br>
-            Vérifie que ton token Airtable est bien renseigné dans le fichier HTML (ligne AIRTABLE_TOKEN).
-          </div>
-        `;
+          <div class="error-box">⚠️ Erreur Airtable : ${e.message}</div>`;
         document.getElementById('articles-container').innerHTML = '';
       }
     }

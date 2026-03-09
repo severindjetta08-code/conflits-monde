@@ -815,13 +815,11 @@ function renderArticles() {
       showingA = !showingA;
 
       // Clic sur le slot ouvre l'article actuel
-      slot.onclick = () => {
-        const url = slotArticles[current]['URL'] || '#';
-        window.open(url, '_blank');
+slot.onclick = () => openArticle(slotArticles[current]);
       };
     }, delay);
 
-    slot.onclick = () => window.open(slotArticles[0]['URL'] || '#', '_blank');
+    slot.onclick = () => openArticle(slotArticles[0]);
     grid.appendChild(slot);
   }
 
@@ -849,7 +847,7 @@ function buildCardInner(a) {
     ${resume ? `<div class="card-resume">${resume}</div>` : ''}
     <div class="card-footer">
       <div class="card-source">${source}</div>
-      <a href="${url}" target="_blank" rel="noopener" class="card-link" onclick="event.stopPropagation()">LIRE →</a>
+      <a href="article.html?id=${encodeURIComponent(url)}" class="card-link" onclick="event.stopPropagation()">LIRE →</a>
     </div>`;
 }
     // ── SEARCH ──
@@ -858,6 +856,12 @@ function buildCardInner(a) {
       renderArticles();
     });
 
+
+//openArticle
+function openArticle(a) {
+  const url = a['URL'] || '#';
+  window.location.href = 'article.html?id=' + encodeURIComponent(url);
+}
     // ── INIT ──
     async function init() {
       try {

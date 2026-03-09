@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HowTheyWar — Article</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f4f2ed; --bg2: #ffffff; --border: #d0ccc3;
+      --blue: #1a3fa0; --blue2: #2452c8; --blue-light: #e8edf8;
+      --red: #cc1122; --red-light: #ffeef0;
+      --text: #0f0f0f; --text2: #444444; --text3: #888888;
+      --card: #ffffff; --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    [data-theme="dark"] {
+      --bg: #0d0d0d; --bg2: #141414; --border: #2a2a2a;
+      --blue: #4a7fff; --blue2: #6b99ff; --blue-light: #0d1a3a;
+      --red: #ff3344; --red-light: #2a0a0d;
+      --text: #f0ede8; --text2: #aaaaaa; --text3: #666666;
+      --card: #181818; --shadow: 0 2px 12px rgba(0,0,0,0.4);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      min-height: 100vh;
+    }
+    header {
+      background: var(--bg2);
+      border-bottom: 3px solid var(--blue);
+      box-shadow: var(--shadow);
+    }
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+    .logo span { color: var(--blue); }
+    .back-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 2px solid var(--blue);
+      padding: 0.4rem 1rem;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { background: var(--blue); color: white; }
+
+    main {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    /* Loading */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5rem;
+      gap: 1rem;
+    }
+    .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-txt {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text3);
+    }
+
+    /* Article */
+    .article-wrap {
+      background: var(--card);
+      border-top: 4px solid var(--blue);
+      box-shadow: var(--shadow);
+      padding: 3rem;
+      animation: fadeUp 0.4s ease forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .meta-cat {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      background: var(--blue-light);
+      color: var(--blue);
+      border-left: 3px solid var(--blue);
+    }
+    .meta-source {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .meta-date {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text3);
+    }
+    .meta-score {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.72rem;
+      color: var(--text3);
+      margin-left: auto;
+    }
+    .meta-score span {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .article-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      margin-bottom: 2rem;
+    }
+
+    .article-divider {
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue), transparent);
+      margin-bottom: 2rem;
+    }
+
+    .article-resume {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--text2);
+      margin-bottom: 3rem;
+    }
+
+    .article-cta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cta-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      background: var(--blue);
+      color: white;
+      text-decoration: none;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .cta-btn:hover { background: var(--blue2); }
+    .cta-warning {
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.75rem;
+      color: var(--text3);
+      line-height: 1.5;
+    }
+
+    /* Error */
+    .error-box {
+      background: var(--red-light);
+      border-left: 4px solid var(--red);
+      padding: 1.5rem;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.9rem;
+      color: var(--red);
+    }
+
+    footer {
+      border-top: 3px solid var(--blue);
+      background: var(--bg2);
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
+    .footer-txt {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.65rem;
+      color: var(--text3);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <a href="thewar.html" class="logo">How<span>They</span>War</a>
+      <a href="thewar.html" class="back-btn">← Retour</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div class="loading-txt">Chargement de l'article...</div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-txt">HowTheyWar · Agrégateur automatisé · Sources vérifiées</div>
+  </footer>
+
+  <script>
+    const AIRTABLE_TOKEN = 'patIAAi7qHfoEFRpA.f670fa21fc99ff527906af49c93052c8e1dd4e0606f2b2eeb26a2b2174d0a1c7';
+    const BASE_ID        = 'appFPxjIG6jk3GGO4';
+    const TABLE_NAME     = 'ConteneurArticles';
+
+    async function init() {
+      // Lire l'URL dans la barre du navigateur
+      const params = new URLSearchParams(window.location.search);
+      const articleUrl = decodeURIComponent(params.get('id') || '');
+
+      if (!articleUrl) {
+        showError('Aucun article spécifié.');
+        return;
+      }
+
+      try {
+        // Chercher l'article dans Airtable par son URL
+        const filterFormula = encodeURIComponent(`{URL}="${articleUrl}"`);
+        const url = `https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}?filterByFormula=${filterFormula}&maxRecords=1`;
+
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` }
+        });
+
+        if (!res.ok) throw new Error(`Erreur ${res.status}`);
+
+        const data = await res.json();
+
+        if (!data.records.length) {
+          showError('Article introuvable dans la base de données.');
+          return;
+        }
+
+        const a = data.records[0].fields;
+        showArticle(a, articleUrl);
+
+      } catch(e) {
+        showError(`Erreur : ${e.message}`);
+      }
+    }
+
+    function showArticle(a, fallbackUrl) {
+      const titre   = a['Titre'] || 'Sans titre';
+      const resume  = a['Résumé'] || 'Aucun résumé disponible.';
+      const source  = a['Source'] || '—';
+      const cat     = a['Catégorie'] || 'Autres';
+      const date    = a['Date'] || '';
+      const score   = a['Score Fiabilité'] || 65;
+      const lien    = a['URL'] || fallbackUrl;
+
+      // Mettre à jour le titre de l'onglet
+      document.title = `${titre} — HowTheyWar`;
+
+      document.getElementById('main').innerHTML = `
+        <div class="article-wrap">
+          <div class="article-meta">
+            <div class="meta-cat">${cat}</div>
+            <div class="meta-source">${source}</div>
+            <div class="meta-date">${date}</div>
+            <div class="meta-score">Fiabilité : <span>${score}/100</span></div>
+          </div>
+
+          <div class="article-title">${titre}</div>
+          <div class="article-divider"></div>
+          <div class="article-resume">${resume}</div>
+
+          <div class="article-cta">
+            <a href="${lien}" target="_blank" rel="noopener" class="cta-btn">
+              Lire l'article complet →
+            </a>
+            <div class="cta-warning">
+              Vous allez être redirigé vers <strong>${source}</strong>.<br/>
+              HowTheyWar n'est pas responsable du contenu externe.
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function showError(msg) {
+      document.getElementById('main').innerHTML = `
+        <div class="error-box">⚠️ ${msg}</div>`;
+    }
+
+    init();
+  </script>
+</body>
+</html>
